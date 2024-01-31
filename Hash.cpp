@@ -33,12 +33,14 @@ public:
 
 		throw "there is nothing by that name";
 	}
+	
 	void clear() {
 		for (int i = 0; i < filled_indexes.getSize(); i++) {
 			arr[filled_indexes[i]].clear();
 		}
 	}
-	
+	Vector<int>& getFilledIndexes() { return filled_indexes; }
+	LinkedList<T>* getArr() { return arr; }
 private:
 	Vector<int> filled_indexes;
 	const int size = 701;

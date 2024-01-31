@@ -349,6 +349,12 @@ void Manager::changeTimeOrBranch(int time,int subtime,string branch) {
 		arr[cnt] = store->get_data();
 		cnt++;
 	}
+	for (int i = 0; i < kdrees.getFilledIndexes().getSize(); i++) {
+		LinkedList<Pair<string, KDTree>> linked_list = kdrees.getArr()[i];
+		for (auto kd : linked_list) {
+			kd->get_data().second.clear();
+		}
+	}
 	kdrees.clear();
 	stores_hash.clear();
 	neighborhoods_hash.clear();
@@ -359,6 +365,30 @@ void Manager::changeTimeOrBranch(int time,int subtime,string branch) {
 		stores_hash.add(node, convertToInt(node->get_data().get_name()));
 	}
 	kdtree.construct(arr, size);
+	mergeSort(arr, size, [](Node<Store>* store) {return store->get_data().get_name(); });
+	KDTree tree;
+	string prev_name;
+	int start = 0;
+	for (int i = 0; i < size; i++) {
+		if (i == 0) {
+			prev_name = arr[i]->get_data().get_name();
+		}
+		if ( prev_name != arr[i]->get_data().get_name()) {
+			tree.construct(arr + start, i - start);
+			kdrees.add({ prev_name,tree }, convertToInt(prev_name));
+			prev_name = arr[i]->get_data().get_name();
+			start = i;
+			
+		}
+		
+
+
+	}
+
+	tree.construct(arr + start, size - start);
+
+	kdrees.add({ prev_name,tree }, convertToInt(prev_name));
+	delete[] arr;
 	this->current_time = time;
 	this->branch_name = branch;
 }

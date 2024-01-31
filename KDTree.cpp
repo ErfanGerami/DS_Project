@@ -425,7 +425,7 @@ void KDTree::_clear(TreeNode* node){
 
 }
 void KDTree::construct(Node<Store>** arr,int size) {
-	_construct( 0, arr,size);
+	this->root=_construct( 0, arr,size);
 
 
 }
@@ -442,12 +442,13 @@ TreeNode* KDTree::_construct( int depth, Node<Store>** arr,int size) {
 
 	int median = size / 2;
 	TreeNode* node = new TreeNode(arr[median], depth, nullptr);
-	TreeNode* right = _construct(depth + 1, arr + (median), floor(median));
-	TreeNode* left = _construct(depth + 1, arr, ceil(median)-1);
-	if(right)
-		right->parent = node;
-	if(left)
-		left->parent = node;
+	node->right = _construct(depth + 1, arr + (median), size-median-1);
+	node->left= _construct(depth + 1, arr, median);
+	
+	if(node->right)
+		node->right->parent = node;
+	if(node->left)
+		node->left->parent = node;
 	return node;
 
 	
