@@ -38,6 +38,7 @@ public:
 	void DEBUG(){//just for DEBUG purposes;
 		
 	}
+	void changeTimeOrBranch(int time,int subtime,string branch);
 	void deleteByCoo(int x, int y, bool new_time);
 	void printNearestBranch(string name, int x, int y);
 	void printInNeighbor(string name);

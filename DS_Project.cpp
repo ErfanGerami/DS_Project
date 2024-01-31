@@ -31,6 +31,7 @@ int main()
         cout << ">>> ";
         cin >> command;
         try {
+            int time,subtime;
             int top, bottom, right, left;
             int x, y;
             float R;
@@ -103,6 +104,11 @@ int main()
             }
             else if (command == "exit") {
                 exit(0);
+            }
+            else if (command == "Undo") {
+                cin >> time>>subtime;
+                string branch_name = "master";
+                manager.changeTimeOrBranch(time, subtime, branch_name);
             }
         }
         catch (const char* err) {

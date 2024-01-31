@@ -401,4 +401,59 @@ float KDTree::distPower2(TreeNode* node1,int x,int y) {
 	return diff_x * diff_x + diff_y * diff_y;//I didnt use the pow function to be safe in case the compiler is changed
 
 }
+void KDTree::clear() {
+	_clear(this->root);
+}
+void KDTree::_clear(TreeNode* node){
+
+	if (node->right) {
+		_clear(node->right);
+	}
+	if (node->left) {
+		_clear(node->left);
+	}
+	if (node->right) {
+		delete node->right;
+	}
+	if (node->left) {
+		delete node->left;
+	}
+	if (node && node == this->root) {
+		delete node;
+		this->root = nullptr;
+	}
+
+}
+void KDTree::construct(Node<Store>** arr,int size) {
+	_construct( 0, arr,size);
+
+
+}
+
+TreeNode* KDTree::_construct( int depth, Node<Store>** arr,int size) {
+	if (size<=0) {
+		return nullptr;
+	}
+	if (!(depth % 2)) {
+		mergeSort(arr, size, [](Node<Store>* node) {return node->get_data().get_x(); });
+	}else{
+		mergeSort(arr, size, [](Node<Store>* node) {return node->get_data().get_y(); });
+	}
+
+	int median = size / 2;
+	TreeNode* node = new TreeNode(arr[median], depth, nullptr);
+	TreeNode* right = _construct(depth + 1, arr + (median), floor(median));
+	TreeNode* left = _construct(depth + 1, arr, ceil(median)-1);
+	if(right)
+		right->parent = node;
+	if(left)
+		left->parent = node;
+	return node;
+
+	
+
+	
+	
+}
+
 

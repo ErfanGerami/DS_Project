@@ -318,3 +318,47 @@ void Manager::writeInFile(string path) {
 	}
 	file_neighbor.close();
 }
+
+void Manager::changeTimeOrBranch(int time,int subtime,string branch) {
+	Time* new_time = timeline.findTime(time, branch);
+	if (!new_time) {
+		throw "there is no such time and branch";
+	}
+	if (subtime > new_time->stores.getSize()) {
+		throw "there is no such subtime";
+	}
+	this->stores.makeEmpty();
+	this->neighbors.makeEmpty();
+	/*for (auto i : stores) {
+		stores.deleteByAdr(i);
+		deleted_stores.pushByAdr(i);
+	}
+	for (auto neighbor : this->neighbors) {
+		neighbors.deleteByAdr(neighbor);
+	}*/
+	for (auto store : new_time->stores[subtime]) {
+		this->stores.pushByAdr(store->get_data());
+	}
+	for (auto neighbor : new_time->neighbors[subtime]) {
+		this->neighbors.pushByAdr(neighbor->get_data());
+	}
+	int size = new_time->stores[subtime].get_size();
+	Node<Store>** arr = new Node<Store>*[size];
+	int cnt = 0;
+	for (auto store : new_time->stores[subtime]) {
+		arr[cnt] = store->get_data();
+		cnt++;
+	}
+	kdrees.clear();
+	stores_hash.clear();
+	neighborhoods_hash.clear();
+	for (auto node : this->neighbors) {
+		neighborhoods_hash.add(node, convertToInt(node->get_data().getName()));
+	}
+	for (auto node : this->stores) {
+		stores_hash.add(node, convertToInt(node->get_data().get_name()));
+	}
+	kdtree.construct(arr, size);
+	this->current_time = time;
+	this->branch_name = branch;
+}

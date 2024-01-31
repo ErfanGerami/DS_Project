@@ -1,4 +1,5 @@
 #pragma once
+
 template<typename T>
 class LinkedList;
 template<typename T>
@@ -201,7 +202,23 @@ public:
 			temp.push(*i);
 		}
 	}
-	
+	void clear() {
+		Node<T>* curr = head;
+		Node<T>* temp = nullptr;
+
+		while (curr) {
+			temp = curr->next;
+			delete curr;
+			curr = temp;
+		}
+		head = nullptr;
+		tail = nullptr;
+		this->size = 0;
+	}
+	void makeEmpty() {
+		this->head = nullptr;
+		this->tail = nullptr;
+	}
 private:
 	Node<T>* head;
 	Node<T>* tail;

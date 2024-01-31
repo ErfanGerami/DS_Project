@@ -4,6 +4,8 @@
 #include "Queue.cpp"`
 #include "Neighborhood.h"
 #include <math.h>
+#include "Merge.cpp"
+#include "Vector.cpp"
 //node--------------------
 class KDTree;
 class TreeNode {
@@ -33,8 +35,12 @@ public:
 	void searchNeighborhood(Neighborhood neighborhood);
 	Node<Store>* findTheClosestPoint( int x, int y);
 	void printAllNodesInRange(int x, int y, float R);
+	void construct(Node<Store>**,int size);
+	void clear();
 	
 private:
+	void _clear(TreeNode* node);
+	TreeNode* _construct( int depth, Node<Store>**,int size);
 	float distPower2(TreeNode* node1,int x,int y);
 	void _printAllNodesInRange(TreeNode* curr, float R2, int x, int y);
 	void _findTheClosestPoint(TreeNode* curr, Pair<TreeNode*, float>& target, int x, int y);

@@ -1,11 +1,14 @@
 #include "LinkedList.cpp"
+#include "Vector.cpp"
 template<typename T>
 class Hash {
 public:
 	Hash() = default;
 
 	void add(T data, int key) {
-		arr[hash_function(key)].push(data);
+		int target_index = hash_function(key);
+		filled_indexes.push(target_index);
+		arr[target_index].push(data);
 	}
 
 	LinkedList<T> get(int key) {
@@ -30,10 +33,14 @@ public:
 
 		throw "there is nothing by that name";
 	}
-	
+	void clear() {
+		for (int i = 0; i < filled_indexes.getSize(); i++) {
+			arr[filled_indexes[i]].clear();
+		}
+	}
 	
 private:
-	
+	Vector<int> filled_indexes;
 	const int size = 701;
 	LinkedList<T> arr[701];
 
