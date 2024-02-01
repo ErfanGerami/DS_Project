@@ -74,16 +74,18 @@ void Manager::addStore(Store store, bool new_time) {
 	node=stores.push(store);
 	try {
 		kdtree.push(node);
-		try {
-			current_time++;
-			branch_names.getIf(convertToInt(branch_name), [this](Pair<string, Pair<int, int>> branch) {return this->branch_name == branch.first; }).second.second++;
+		if (new_time) {
+			try {
 
-			this->timeline.addTime({ branch_name,current_time });
+				current_time++;
+				branch_names.getIf(convertToInt(branch_name), [this](Pair<string, Pair<int, int>> branch) {return this->branch_name == branch.first; }).second.second++;
+
+				this->timeline.addTime({ branch_name,current_time });
+			}
+			catch (const char* err) {
+
+			}
 		}
-		catch (const char* err) {
-
-		}
-
 	}
 	catch(const char* err ){
 		stores.deleteByAdr(node);
@@ -135,14 +137,16 @@ void Manager::addNeighborhood(Neighborhood neighborhood,  bool new_time) {
 	catch (const char* err) {
 		//pass;
 	}
-	try {
-		current_time++;
-		branch_names.getIf(convertToInt(branch_name), [this](Pair<string, Pair<int, int>> branch) {return this->branch_name == branch.first; }).second.second++;
+	if (new_time) {
+		try {
+			current_time++;
+			branch_names.getIf(convertToInt(branch_name), [this](Pair<string, Pair<int, int>> branch) {return this->branch_name == branch.first; }).second.second++;
 
-		this->timeline.addTime({ branch_name,current_time });
-	}
-	catch (const char* err) {
+			this->timeline.addTime({ branch_name,current_time });
+		}
+		catch (const char* err) {
 
+		}
 	}
 	auto node=this->neighbors.push(neighborhood);
 	this->neighborhoods_hash.add(node, convertToInt(neighborhood.getName()));
@@ -210,14 +214,17 @@ void Manager::deleteByCoo(int x, int y,  bool new_time) {
 	if (node == nullptr) {
 		throw "there is no node with that coordinence";
 	}
-	try {
-		current_time++;
-		branch_names.getIf(convertToInt(branch_name), [this](Pair<string, Pair<int, int>> branch) {return this->branch_name == branch.first; }).second.second++;
+	if (new_time) {
 
-		this->timeline.addTime({ branch_name,current_time });
-	}
-	catch (const char* err) {
+		try {
+			current_time++;
+			branch_names.getIf(convertToInt(branch_name), [this](Pair<string, Pair<int, int>> branch) {return this->branch_name == branch.first; }).second.second++;
 
+			this->timeline.addTime({ branch_name,current_time });
+		}
+		catch (const char* err) {
+
+		}
 	}
 	string name = node->get_data().get_name();
 	Pair<string, KDTree>& p =kdrees.getIf(convertToInt(name), [name](Pair<string, KDTree>& p) {return (p.first == name); });
@@ -500,4 +507,13 @@ void Manager::printAllBranches() {
 ostream& operator<<(ostream& out, Pair<string, Pair<int, int>> branch){
 	out << branch.first << "(" << branch.second.first << "," << branch.second.second << ")" << endl;
 	return out;
+}
+void Manager::printTimeStat(int time) {
+	LinkedList<Time>* target_time = timeline.findTime(time);
+	if (target_time == nullptr)
+		cout << "no such time";
+	for (auto i : *target_time) {
+		int subtimes = i->get_data().stores.getSize();
+		cout << i->get_data().get_branchName() << ":" << subtimes <<( subtimes - 1 ? " subtimes" : "subtime") << endl;
+	}
 }

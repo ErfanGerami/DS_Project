@@ -13,6 +13,7 @@ struct s {
 };
 int main()
 {
+    
     bool new_time = true;
     Manager manager;
     string command="";
@@ -28,7 +29,9 @@ int main()
     }
     
     while (1) {
-        cout << manager.get_currBranch()<<"("<<manager.get_time()<<")"<<">>> ";
+
+        if(new_time)
+            cout << manager.get_currBranch()<<"("<<manager.get_time()<<")"<<">>> ";
         cin >> command;
         try {
             int time,subtime;
@@ -39,6 +42,7 @@ int main()
             if (command == "Add-P") {
                 cin >> x >> y >> name;
                 manager.addStore(Store({ x,y }, name, true), new_time);
+
 
 
             }
@@ -119,11 +123,16 @@ int main()
             else if (command == "List-Branches") {
                 manager.printAllBranches();
             }
+            else if (command == "time") {
+                cin >> time;
+                manager.printTimeStat(time);
+
+            }
            /* else if (command == "Check-Out") {
                 cin >> name >> time >> subtime;
                manager.changeTimeOrBranch(time,subtime,branch)
             }*/
-            else {
+            else if(command!="&&") {
                 throw  "unknown command";
             }
         }

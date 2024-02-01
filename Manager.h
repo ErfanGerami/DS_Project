@@ -51,6 +51,7 @@ public:
 	void create_branch(string name);
 	void printAllBranches();
 
+	void printTimeStat(int time);
 
 private:
 	Hash<Pair<string,Pair<int,int>>> branch_names;

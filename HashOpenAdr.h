@@ -31,6 +31,17 @@ public:
 		return nullptr;
 
 	}
+	LinkedList<Time>* findTime(int time) {
+		for (int i = 0; i < this->capacity; i++) {
+			int candidate = hashFunction(time, i);
+			if (arr[candidate].get_size() != 0
+				&& arr[candidate].front().get_time() == time) {
+				return &arr[candidate];
+			}
+		}
+		return nullptr;
+	}
+
 	int find_empty(int key) {
 		for (int i = 0; i < this->capacity; i++) {
 			int candidate = hashFunction(key, i);
