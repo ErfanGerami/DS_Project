@@ -28,7 +28,7 @@ int main()
     }
     
     while (1) {
-        cout << ">>> ";
+        cout << manager.get_currBranch()<<"("<<manager.get_time()<<")"<<">>> ";
         cin >> command;
         try {
             int time,subtime;
@@ -107,8 +107,24 @@ int main()
             }
             else if (command == "Undo") {
                 cin >> time>>subtime;
+
                 string branch_name = "master";
+                cin >> branch_name;
                 manager.changeTimeOrBranch(time, subtime, branch_name);
+            }
+            else if (command == "branch") {
+                cin >> name;
+                manager.create_branch(name);
+            }
+            else if (command == "List-Branches") {
+                manager.printAllBranches();
+            }
+           /* else if (command == "Check-Out") {
+                cin >> name >> time >> subtime;
+               manager.changeTimeOrBranch(time,subtime,branch)
+            }*/
+            else {
+                throw  "unknown command";
             }
         }
         catch (const char* err) {

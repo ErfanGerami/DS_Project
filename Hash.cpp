@@ -1,5 +1,7 @@
 #include "LinkedList.cpp"
 #include "Vector.cpp"
+#include<iostream>
+using namespace std;
 template<typename T>
 class Hash {
 public:
@@ -41,6 +43,14 @@ public:
 	}
 	Vector<int>& getFilledIndexes() { return filled_indexes; }
 	LinkedList<T>* getArr() { return arr; }
+	void printAll() {
+		for (int i = 0; i < filled_indexes.getSize();i++) {
+			for (auto j : arr[filled_indexes[i]])
+			{
+				cout << j->get_data();
+			}
+		}
+	}
 private:
 	Vector<int> filled_indexes;
 	const int size = 701;

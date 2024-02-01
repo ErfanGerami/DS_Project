@@ -44,7 +44,16 @@ public:
 	void printInNeighbor(string name);
 	void printAllBranches(string name);
 	void printAllInRange(int x, int y, float R);
+	bool isTheLastTime(int time,string branch_name);
+	string get_currBranch() { return branch_name; }
+	int get_time() { return current_time; }
+	void set_branch(string branch);
+	void create_branch(string name);
+	void printAllBranches();
+
+
 private:
+	Hash<Pair<string,Pair<int,int>>> branch_names;
 	LinkedList<Store> stores;
 	LinkedList<Store> deleted_stores;
 	Hash<Node<Store>*> stores_hash;
@@ -55,7 +64,9 @@ private:
 	Hash < Pair<string, KDTree>>  kdrees;
 	HashOpenAdr timeline;
 	string branch_name="master";
-	int current_time=-1;
+	int current_time=0;
 	
 
 };
+
+ostream& operator<<(ostream& out, Pair<string, Pair<int, int>> branch);

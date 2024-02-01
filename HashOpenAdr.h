@@ -52,6 +52,7 @@ public:
 		return -1;
 	}
 	void addTime(Time time) {
+		
 		int index = find_empty(time.get_time());
 		if (index == -1) {
 
@@ -63,6 +64,11 @@ public:
 			delete this->arr;
 			this->arr = temp;
 
+		}
+		for (auto i : arr[index]) {
+			if (i->get_data().get_branchName() == time.get_branchName()) {
+				throw "there is a time with that specifics";
+			}
 		}
 		this->arr[find_empty(time.get_time())].push(time);
 

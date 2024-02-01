@@ -60,6 +60,9 @@ void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 	if (!(depth % 2)) {//x 
 		if (data->get_data().get_x() >= curr->data->get_data().get_x()) {
 			if (curr->right == nullptr) {
+				if (curr->data->get_data().get_x() == data->get_data().get_x() && curr->data->get_data().get_y() == data->get_data().get_y()) {
+					throw "there is another store with this coordineence";
+				}
 				curr->right = new TreeNode(data,depth+1, curr);
 			}
 			else {
@@ -81,6 +84,9 @@ void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 	else {//y
 		if (data->get_data().get_y() >= curr->data->get_data().get_y()) {
 			if (curr->right == nullptr) {
+				if (curr->data->get_data().get_x() == data->get_data().get_x() && curr->data->get_data().get_y() == data->get_data().get_y()) {
+					throw "there is another store with this coordineence";
+				}
 				curr->right = new TreeNode(data,depth+1, curr);
 			}
 			else {
@@ -90,6 +96,7 @@ void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 		}
 		else {
 			if (curr->left == nullptr) {
+				
 				curr->left = new TreeNode(data,depth+1, curr);
 				
 			}
@@ -103,6 +110,9 @@ void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 }
 
 TreeNode* KDTree::find(TreeNode* curr, int x, int  y, int depth) {
+	if (!curr) {
+		return nullptr;
+	}
 	int curr_x = curr->data->get_data().get_x();
 	int curr_y = curr->data->get_data().get_y();
 	if (curr_x == x && curr_y == y)
@@ -405,7 +415,8 @@ void KDTree::clear() {
 	_clear(this->root);
 }
 void KDTree::_clear(TreeNode* node){
-
+	if (!node)
+		return;
 	if (node->right) {
 		_clear(node->right);
 	}
