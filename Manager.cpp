@@ -2,9 +2,9 @@
 
 
 Manager::Manager() {
-
 	this->create_branch("master");
 	this->timeline.addTime({ branch_name,current_time });
+
 
 	
 
@@ -381,17 +381,23 @@ void Manager::writeInFile(string path) {
 }
 
 void Manager::changeTimeOrBranch(int time,int subtime,string branch) {
+	if (time < 0) {
+		throw "no such time";
+	}
 	Pair<string,Pair<int, int>>  this_branch = branch_names.getIf(convertToInt(branch_name), [branch,this](Pair<string, Pair<int, int>> target_branch) {return branch_name == target_branch.first; });
 
 	Pair<int,int>  branch_time = branch_names.getIf(convertToInt(branch), [branch](Pair<string, Pair<int, int>> target_branch) {return branch == target_branch.first; }).second;
 	if (time<branch_time.first || time>branch_time.second) {
+		
 		throw "there is no such time and branch";
+		
 	}
+	
 	Time* new_time = timeline.findTime(time, branch);
 	if (!new_time) {
 		throw "there is no such time and branch";
 	}
-	if (subtime > new_time->stores.getSize()) {
+	if (subtime > new_time->stores.getSize()-1) {
 		throw "there is no such subtime";
 	}
 	////saving time
@@ -511,6 +517,9 @@ ostream& operator<<(ostream& out, Pair<string, Pair<int, int>> branch){
 	return out;
 }
 void Manager::printTimeStat(int time) {
+	if (time < 0) {
+		throw "no such time;";
+	}
 	LinkedList<Time>* target_time = timeline.findTime(time);
 	if (target_time == nullptr)
 		cout << "no such time";
@@ -530,4 +539,8 @@ void Manager::buildKDTree() {
 	this->kdtree.clear();
 	this->kdtree.construct(arr, cnt);
 	
+}
+void Manager::printNearest(int x, int y) {
+	Node<Store>* node = kdtree.findTheClosestPoint(x, y);
+	cout << node->get_data() << endl;
 }

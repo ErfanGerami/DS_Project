@@ -31,10 +31,6 @@ public:
 	void printLargest();
 	void printCooByName(string name);
 	void printKDTree_DEBUG();
-	void printNearest(int x, int y) {
-		Node<Store>* node = kdtree.findTheClosestPoint(x, y);
-		cout << node->get_data();
-	}
 	void DEBUG(){//just for DEBUG purposes;
 		
 	}
@@ -53,6 +49,7 @@ public:
 
 	void printTimeStat(int time);
 	void buildKDTree();
+	void printNearest(int x, int y);
 
 private:
 	Hash<Pair<string,Pair<int,int>>> branch_names;

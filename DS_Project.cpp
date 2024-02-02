@@ -25,13 +25,18 @@ int main()
         string path;
         cout << "path: ";
         cin >> path;
-        manager.readFromFile(path);
+        try {
+            manager.readFromFile(path);
+        }
+        catch (const char* err) {
+            //pass 
+        }
     }
     
     while (1) {
 
         if(new_time)
-            cout << manager.get_currBranch()<<"("<<manager.get_time()<<")"<<">>> ";
+            cout << manager.get_currBranch()<<"("<<manager.get_time()+1<<")"<<">>> ";
         cin >> command;
         try {
             int time,subtime;

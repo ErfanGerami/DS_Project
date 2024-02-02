@@ -73,13 +73,13 @@ void KDTree::push(Node<Store>* data) {
 	}
 }
 void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
-	
+	if (curr->data->get_data().get_x() == data->get_data().get_x() && curr->data->get_data().get_y() == data->get_data().get_y()) {
+		throw "there is another store with this coordineence";
+	}
 	if (!(depth % 2)) {//x 
 		if (data->get_data().get_x() >= curr->data->get_data().get_x()) {
 			if (curr->right == nullptr) {
-				if (curr->data->get_data().get_x() == data->get_data().get_x() && curr->data->get_data().get_y() == data->get_data().get_y()) {
-					throw "there is another store with this coordineence";
-				}
+				
 				curr->right = new TreeNode(data,depth+1, curr);
 				if (!fix_up_h(curr->right)) {
 					throw "tree not balanced";
@@ -111,9 +111,7 @@ void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 	else {//y
 		if (data->get_data().get_y() >= curr->data->get_data().get_y()) {
 			if (curr->right == nullptr) {
-				if (curr->data->get_data().get_x() == data->get_data().get_x() && curr->data->get_data().get_y() == data->get_data().get_y()) {
-					throw "there is another store with this coordineence";
-				}
+				
 				curr->right = new TreeNode(data,depth+1, curr);
 				if (!fix_up_h(curr->right)) {
 					throw "tree not balanced";
