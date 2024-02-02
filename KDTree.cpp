@@ -6,6 +6,7 @@ TreeNode::TreeNode(Node<Store>* data,int depth, TreeNode* parent , TreeNode* lef
 	this->left = left;
 	this->data = data;
 	this->depth = depth;
+	this->h = 0;
 }
 
 KDTree::KDTree()=default;
@@ -32,10 +33,11 @@ void KDTree::BFSPrint() {
 		if (prev_parent != node->parent) {
 
 
-			cout << "   " << node->parent->data->get_data().get_name() << ": ";
+			cout << node->parent->data->get_data().get_individualName() << "[" << node->parent->data->get_data().get_x() << "," << node->parent->data->get_data().get_y() << "]" << ':';
+
 			prev_parent = node->parent;
 		}
-		cout <<node->data->get_data().get_name() << ' ';
+		cout << node->data->get_data().get_individualName() <<"[" << node->data->get_data().get_x()<<","<< node->data->get_data().get_y() <<"]" << ' ';
 		nodes_in_same_height--;
 		if (!nodes_in_same_height) {
 
@@ -53,7 +55,22 @@ void KDTree::push(Node<Store>* data) {
 		this->root = new TreeNode(data,0);
 		return;
 	}
-	recursivePush(this->root, data, 0);
+	try {
+		recursivePush(this->root, data, 0);
+	}
+	catch (const char* err) {
+		if (string(err) == "tree not balanced") {
+			Vector<Node<Store>*> vec;
+			this->AddAll(vec,this->root);
+			this->clear();
+			this->construct(vec.get_arr(), vec.getSize());
+			vec.clear();
+
+		}
+		else {
+			throw err;
+		}
+	}
 }
 void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 	
@@ -64,6 +81,11 @@ void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 					throw "there is another store with this coordineence";
 				}
 				curr->right = new TreeNode(data,depth+1, curr);
+				if (!fix_up_h(curr->right)) {
+					throw "tree not balanced";
+
+				}
+				
 			}
 			else {
 				recursivePush(curr->right, data, depth + 1);
@@ -73,6 +95,11 @@ void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 		else {
 			if (curr->left == nullptr) {
 				curr->left = new TreeNode(data,depth+1, curr);
+				if (!fix_up_h(curr->left)) {
+					throw "tree not balanced";
+
+				}
+
 				
 			}
 			else {
@@ -88,6 +115,11 @@ void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 					throw "there is another store with this coordineence";
 				}
 				curr->right = new TreeNode(data,depth+1, curr);
+				if (!fix_up_h(curr->right)) {
+					throw "tree not balanced";
+
+				}
+
 			}
 			else {
 				recursivePush(curr->right, data, depth + 1);
@@ -98,6 +130,11 @@ void KDTree::recursivePush(TreeNode* curr, Node<Store>* data, int depth) {
 			if (curr->left == nullptr) {
 				
 				curr->left = new TreeNode(data,depth+1, curr);
+				if (!fix_up_h(curr->left)) {
+					throw "tree not balanced";
+
+				}
+
 				
 			}
 			else {
@@ -142,7 +179,6 @@ TreeNode* KDTree::find(TreeNode* curr, int x, int  y, int depth) {
 }
 
 Node<Store>* KDTree::deleteByCoo(int x, int y) {
-	size--;
 	TreeNode* target = find(this->root, x, y, 0);
 	if (target == nullptr)
 		throw "no such node with this coordinence";
@@ -150,13 +186,26 @@ Node<Store>* KDTree::deleteByCoo(int x, int y) {
 	Node<Store>* result = target->data;
 	if (result->get_data().get_is_original())
 		throw "the store is the main branch";
+	try {
+		deleteByAdr(target);
+	}
+	catch(const char* err){
+		if (string(err) == "tree not balanced") {
+			Vector<Node<Store>*> vec;
+			this->AddAll(vec, this->root);
+			this->clear();
+			this->construct(vec.get_arr(), vec.getSize());
+			vec.clear();
 
-	deleteByAdr(target);
+		}
+	}
+	size--;
+
 	return result;
 }
 void KDTree::deleteByAdr(TreeNode* node) {
 	if (node->left == nullptr && node->right == nullptr) {//the node is a leaf
-
+		TreeNode* parent = node->parent;
 		if (!node->parent) {//node is root
 			delete this->root;
 			this->root = nullptr;
@@ -168,6 +217,9 @@ void KDTree::deleteByAdr(TreeNode* node) {
 				node->parent->left = nullptr;
 
 			delete node;
+		}
+		if (!fix_up_h(parent)) {
+			throw "tree not balanced";
 		}
 	}
 	else if(node->right) {//it has a right node
@@ -453,7 +505,7 @@ TreeNode* KDTree::_construct( int depth, Node<Store>** arr,int size) {
 
 	int median = size / 2;
 	TreeNode* node = new TreeNode(arr[median], depth, nullptr);
-	node->right = _construct(depth + 1, arr + (median), size-median-1);
+	node->right = _construct(depth + 1, arr + median+1, size-median-1);
 	node->left= _construct(depth + 1, arr, median);
 	
 	if(node->right)
@@ -468,4 +520,50 @@ TreeNode* KDTree::_construct( int depth, Node<Store>** arr,int size) {
 	
 }
 
+bool KDTree :: fix_up_h(TreeNode* problem_node) {
+	if (!problem_node) {
+		true;
+	}
+	TreeNode* parent = problem_node;
+	while (parent) {
+		int h = -1;
+		if (parent->right) {
+			h = parent->right->h;
+			
+		}
+		if (parent->left && parent->left->h > h) {
+			h = parent->left->h;
+		}
+		parent->h = h+1;
+		//check
+		if (parent->right && parent->left) {
+			if (abs(parent->right->h - parent->left->h) > 1) {
+				return false;
+			}
+		}
+		else if (parent->right && !parent->left) {
+			if (parent->right->h > 0) {
+				return false;
+			}
+		}
+		else if (parent->left && !parent->right) {
+			if (parent->left->h > 0) {
+				return false;
+			}
+		}
+		parent = parent->parent;
 
+	}
+	return true;
+}
+void KDTree::AddAll(Vector < Node<Store>*>& vec,TreeNode* curr) {
+	if (!curr) {
+		return;
+
+
+	}
+	vec.push(curr->data);
+	AddAll(vec,curr->right);
+	AddAll(vec, curr->left);
+
+}

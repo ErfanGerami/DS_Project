@@ -39,6 +39,7 @@ public:
 		this->size = 0;
 		delete arr;
 	}
+	T* get_arr() { return arr; }
 
 private:
 	T* arr;

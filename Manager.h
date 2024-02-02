@@ -52,6 +52,7 @@ public:
 	void printAllBranches();
 
 	void printTimeStat(int time);
+	void buildKDTree();
 
 private:
 	Hash<Pair<string,Pair<int,int>>> branch_names;

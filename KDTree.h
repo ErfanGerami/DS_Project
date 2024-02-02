@@ -15,6 +15,7 @@ public:
 
 
 private:
+	int h;
 	Node<Store>* data;
 	int depth;
 	TreeNode* left;
@@ -28,6 +29,7 @@ private:
 class KDTree {
 
 public:
+
 	KDTree();
 	void push(Node<Store>* data);
 	void BFSPrint();
@@ -37,7 +39,9 @@ public:
 	void printAllNodesInRange(int x, int y, float R);
 	void construct(Node<Store>**,int size);
 	void clear();
-	
+	bool fix_up_h(TreeNode* problem_node);
+	void AddAll(Vector < Node<Store>*>& vec, TreeNode* curr);
+
 private:
 	void _clear(TreeNode* node);
 	TreeNode* _construct( int depth, Node<Store>**,int size);

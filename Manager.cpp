@@ -87,10 +87,12 @@ void Manager::addStore(Store store, bool new_time) {
 			}
 		}
 	}
-	catch(const char* err ){
+	catch (const char* err) {
+
 		stores.deleteByAdr(node);
 		delete node;
 		throw err;
+
 
 	}
 
@@ -516,4 +518,16 @@ void Manager::printTimeStat(int time) {
 		int subtimes = i->get_data().stores.getSize();
 		cout << i->get_data().get_branchName() << ":" << subtimes <<( subtimes - 1 ? " subtimes" : "subtime") << endl;
 	}
+}
+void Manager::buildKDTree() {
+
+	Node<Store>** arr = new Node<Store>*[stores.get_size()];
+	int cnt = 0;
+	for (auto store : this->stores) {
+		arr[cnt] = store;
+		cnt++;
+	}
+	this->kdtree.clear();
+	this->kdtree.construct(arr, cnt);
+	
 }
