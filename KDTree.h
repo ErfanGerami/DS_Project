@@ -44,7 +44,8 @@ public:
 
 private:
 	void _clear(TreeNode* node);
-	TreeNode* _construct( int depth, Node<Store>**,int size);
+	TreeNode* _construct( int depth, Node<Store>**,int size); 
+	TreeNode* _construct(int depth, Vector<Node<Store>*> x_s, Vector<Node<Store>*> y_s);
 	float distPower2(TreeNode* node1,int x,int y);
 	void _printAllNodesInRange(TreeNode* curr, float R2, int x, int y);
 	void _findTheClosestPoint(TreeNode* curr, Pair<TreeNode*, float>& target, int x, int y);

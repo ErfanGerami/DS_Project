@@ -486,11 +486,97 @@ void KDTree::_clear(TreeNode* node){
 
 }
 void KDTree::construct(Node<Store>** arr,int size) {
-	this->root=_construct( 0, arr,size);
+	this->root = _construct(0,arr,size);
 
+	/*Vector<Node<Store>*> vec_x(size);
+	Vector<Node<Store>*> vec_y(size);
+	mergeSort(arr, size, [](Node<Store>* target_node) {return target_node->get_data().get_x(); });
+	for (int i = 0; i < size; i++) {
+		vec_x.push(arr[i]);
+	}
+	mergeSort(arr, size, [](Node<Store>* target_node) {return target_node->get_data().get_y(); });
+	for (int i = 0; i < size; i++) {
+		vec_y.push(arr[i]);
+	}
+	
+	
+	
+	this->root = _construct(0,vec_x, vec_y);
+	*/
 
 }
 
+TreeNode* KDTree::_construct(int depth,Vector<Node<Store>*> x_s, Vector<Node<Store>*> y_s) {
+	if (x_s.getSize() <= 0) {
+		return nullptr;
+	}
+	int median = x_s.getSize() / 2;
+	TreeNode* node;
+	Vector<Node<Store>*> x_s_left(median);
+	Vector<Node<Store>*> y_s_left(median);
+	Vector<Node<Store>*> x_s_right(x_s.getSize()-median-1);
+	Vector<Node<Store>*> y_s_right(x_s.getSize()-median-1);
+	if (!(depth%2)) {
+		node = new TreeNode(x_s[median], depth, nullptr);
+		Node<Store>* median_node = x_s[median];
+		for (int i = 0; i < median; i++) {
+			x_s_left.push(x_s[i]);
+
+		}
+		
+		for(int i=median+1;i<x_s.getSize();i++){
+
+			x_s_right.push(x_s[i]);
+
+		}
+		for (int i = 0; i < y_s.getSize(); i++) {
+			if (median_node->get_data().get_x() < y_s[i]->get_data().get_x()) {
+				y_s_left.push(y_s[i]);
+
+			}
+			else if (median_node->get_data().get_x() != y_s[i]->get_data().get_x() || median_node->get_data().get_y() != y_s[i]->get_data().get_y()) {
+				y_s_right.push(y_s[i]);
+			}
+		}
+
+	}
+	else {
+		int median = y_s.getSize() / 2;
+		node = new TreeNode(x_s[median], depth, nullptr);
+		Node<Store>* median_node = y_s[median];
+		for (int i = 0; i < median; i++) {
+			y_s_left.push(y_s[i]);
+
+		}
+
+		for (int i = median + 1; i < x_s.getSize(); i++) {
+
+			y_s_right.push(y_s[i]);
+
+		}
+		for (int i = 0; i < x_s.getSize(); i++) {
+			if (median_node->get_data().get_y() < y_s[i]->get_data().get_y()) {
+				x_s_left.push(x_s[i]);
+
+			}
+			else if (median_node->get_data().get_x() != y_s[i]->get_data().get_x() || median_node->get_data().get_y() != y_s[i]->get_data().get_y()) {
+				x_s_right.push(x_s[i]);
+			}
+		}
+
+
+	}
+		node->left = _construct(depth + 1, x_s_left, y_s_left);
+		node->right = _construct(depth + 1, x_s_right, y_s_right);
+
+		if (node->right)
+			node->right->parent = node;
+		if (node->left)
+			node->left->parent = node;
+		return node;
+
+
+}
 TreeNode* KDTree::_construct( int depth, Node<Store>** arr,int size) {
 	if (size<=0) {
 		return nullptr;
