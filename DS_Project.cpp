@@ -36,7 +36,7 @@ int main()
     while (1) {
 
         if(new_time)
-            cout << manager.get_currBranch()<<"("<<manager.get_time()+1<<")"<<">>> ";
+            cout << manager.get_currBranch()<<"("<<manager.get_time()<<")"<<">>> ";
         cin >> command;
         try {
             int time,subtime;

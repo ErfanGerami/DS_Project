@@ -5,6 +5,9 @@ Manager::Manager() {
 	this->create_branch("master");
 	this->timeline.addTime({ branch_name,current_time });
 
+	current_time++;
+	this->timeline.addTime({ branch_name,current_time });
+
 
 	
 
@@ -384,16 +387,36 @@ void Manager::changeTimeOrBranch(int time,int subtime,string branch) {
 	if (time < 0) {
 		throw "no such time";
 	}
+	if (branch_name == "master" && time==1 && subtime == 0) {
+		kdtree.clear();
+		stores_hash.clear();
+		neighborhoods_hash.clear();
+		current_time = 1;
+		return;
+	}
+	
 	Pair<string,Pair<int, int>>  this_branch = branch_names.getIf(convertToInt(branch_name), [branch,this](Pair<string, Pair<int, int>> target_branch) {return branch_name == target_branch.first; });
 
 	Pair<int,int>  branch_time = branch_names.getIf(convertToInt(branch), [branch](Pair<string, Pair<int, int>> target_branch) {return branch == target_branch.first; }).second;
-	if (time<branch_time.first || time>branch_time.second) {
+	if (time<branch_time.first || time>branch_time.second+1) {
 		
 		throw "there is no such time and branch";
 		
 	}
 	
+	/*if (time == lastTime(branch) + 1) {
+		if (subtime != 0) {
+			throw "there is no such subtime";
+
+		}
+		Time* new_time = timeline.findTime(time, branch);
+		changeTimeOrBranch(time - 1, new_time->stores.getSize() - 1,branch);
+		this->current_time = time;
+		return;
+
+	}*/
 	Time* new_time = timeline.findTime(time, branch);
+	
 	if (!new_time) {
 		throw "there is no such time and branch";
 	}
@@ -481,12 +504,18 @@ void Manager::changeTimeOrBranch(int time,int subtime,string branch) {
 	}
 }
 bool Manager::isTheLastTime(int time,string branch_name) {
-	int last_time = branch_names.getIf(convertToInt(branch_name), [branch_name](Pair<string, Pair<int, int>> branch) {return branch_name == branch.first; }).second.second;
-	if (time== last_time)
+	int last_time = this->lastTime(branch_name);
+	if (time== last_time+1)
 		return true;
 	return false;
 
 }
+int Manager::lastTime(string branch_name) {
+	return branch_names.getIf(convertToInt(branch_name), [branch_name](Pair<string, Pair<int, int>> branch) {return branch_name == branch.first; }).second.second;
+
+
+}
+
 
 void Manager::set_branch(string branch) { this->branch_name = branch; }
 void Manager::create_branch(string name) {
@@ -503,8 +532,11 @@ void Manager::create_branch(string name) {
 	if (found) {
 		throw "there is a branch with that name";
 	}
-
-	branch_names.add(Pair<string, Pair<int, int>>{name, {current_time,current_time}}, convertToInt(name));
+	int time = current_time-1;
+	if (name == "master") {
+		time = current_time;
+	}
+	branch_names.add(Pair<string, Pair<int, int>>{name, {current_time-1,time}}, convertToInt(name));
 	
 	branch_name = name;
 }

@@ -1,6 +1,14 @@
-﻿  DS_Project.cpp
+﻿  Manager.cpp
 C:\Users\Geramizade\source\repos\DS_Project\DS_Project\KDTree.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  (compiling source file 'DS_Project.cpp')
+  (compiling source file 'Manager.cpp')
   
-C:\Users\Geramizade\source\repos\DS_Project\DS_Project\DS_Project.cpp(31,28): warning C4101: 'err': unreferenced local variable
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\Manager.cpp(38,21): warning C4101: 'err': unreferenced local variable
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\Manager.cpp(51,22): warning C4101: 'err': unreferenced local variable
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\Manager.cpp(67,21): warning C4101: 'err': unreferenced local variable
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\Manager.cpp(88,23): warning C4101: 'err': unreferenced local variable
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\Manager.cpp(110,20): warning C4101: 'err': unreferenced local variable
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\Manager.cpp(142,21): warning C4101: 'err': unreferenced local variable
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\Manager.cpp(152,22): warning C4101: 'err': unreferenced local variable
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\Manager.cpp(230,22): warning C4101: 'err': unreferenced local variable
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\Manager.cpp(529,21): warning C4101: 'err': unreferenced local variable
   DS_Project.vcxproj -> C:\Users\Geramizade\source\repos\DS_Project\x64\Debug\DS_Project.exe

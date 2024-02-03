@@ -50,6 +50,7 @@ public:
 	void printTimeStat(int time);
 	void buildKDTree();
 	void printNearest(int x, int y);
+	int lastTime(string branch_name);
 
 private:
 	Hash<Pair<string,Pair<int,int>>> branch_names;
