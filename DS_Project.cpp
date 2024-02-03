@@ -6,6 +6,26 @@
 #include "Manager.h"
 #include "KDTree.h"
 #include "KDTree.h"
+#include<time.h>
+#include<windows.h>
+#include<stdlib.h>
+#include<dos.h>
+#include<conio.h>
+
+void setcolor(int ForgC) 
+{
+    WORD wColor;
+
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+    if (GetConsoleScreenBufferInfo(hStdOut, &csbi))
+    {
+        wColor = (csbi.wAttributes & 0xF0) + (ForgC & 0x0F);
+        SetConsoleTextAttribute(hStdOut, wColor);
+    }
+    return;
+}
 using namespace std;
 struct s {
     string salam;
@@ -13,6 +33,7 @@ struct s {
 };
 int main()
 {
+    setcolor(2);
     
     bool new_time = true;
     Manager manager;
@@ -35,8 +56,11 @@ int main()
     
     while (1) {
 
-        if(new_time)
-            cout << manager.get_currBranch()<<"("<<manager.get_time()<<")"<<">>> ";
+        if (new_time) {
+            setcolor(1);
+            cout << manager.get_currBranch() << "(" << manager.get_time() << ")" << ">>> ";
+        }
+        setcolor(6);
         cin >> command;
         try {
             int time,subtime;
@@ -142,6 +166,7 @@ int main()
             }
         }
         catch (const char* err) {
+            setcolor(4);
             cout << err<<endl;
         }
         new_time = true;

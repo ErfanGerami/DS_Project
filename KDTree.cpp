@@ -486,9 +486,9 @@ void KDTree::_clear(TreeNode* node){
 
 }
 void KDTree::construct(Node<Store>** arr,int size) {
-	this->root = _construct(0,arr,size);
+	//this->root = _construct(0,arr,size);
 
-	/*Vector<Node<Store>*> vec_x(size);
+	Vector<Node<Store>*> vec_x(size);
 	Vector<Node<Store>*> vec_y(size);
 	mergeSort(arr, size, [](Node<Store>* target_node) {return target_node->get_data().get_x(); });
 	for (int i = 0; i < size; i++) {
@@ -502,7 +502,7 @@ void KDTree::construct(Node<Store>** arr,int size) {
 	
 	
 	this->root = _construct(0,vec_x, vec_y);
-	*/
+	
 
 }
 
@@ -530,7 +530,7 @@ TreeNode* KDTree::_construct(int depth,Vector<Node<Store>*> x_s, Vector<Node<Sto
 
 		}
 		for (int i = 0; i < y_s.getSize(); i++) {
-			if (median_node->get_data().get_x() < y_s[i]->get_data().get_x()) {
+			if (median_node->get_data().get_x() > y_s[i]->get_data().get_x()) {
 				y_s_left.push(y_s[i]);
 
 			}
@@ -542,7 +542,7 @@ TreeNode* KDTree::_construct(int depth,Vector<Node<Store>*> x_s, Vector<Node<Sto
 	}
 	else {
 		int median = y_s.getSize() / 2;
-		node = new TreeNode(x_s[median], depth, nullptr);
+		node = new TreeNode(y_s[median], depth, nullptr);
 		Node<Store>* median_node = y_s[median];
 		for (int i = 0; i < median; i++) {
 			y_s_left.push(y_s[i]);
@@ -555,7 +555,7 @@ TreeNode* KDTree::_construct(int depth,Vector<Node<Store>*> x_s, Vector<Node<Sto
 
 		}
 		for (int i = 0; i < x_s.getSize(); i++) {
-			if (median_node->get_data().get_y() < y_s[i]->get_data().get_y()) {
+			if (median_node->get_data().get_y() > y_s[i]->get_data().get_y()) {
 				x_s_left.push(x_s[i]);
 
 			}

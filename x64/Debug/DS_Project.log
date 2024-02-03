@@ -1,6 +1,6 @@
-﻿  KDTree.cpp
+﻿  DS_Project.cpp
 C:\Users\Geramizade\source\repos\DS_Project\DS_Project\KDTree.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  (compiling source file 'KDTree.cpp')
+  (compiling source file 'DS_Project.cpp')
   
-C:\Users\Geramizade\source\repos\DS_Project\DS_Project\KDTree.cpp(461,25): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\Geramizade\source\repos\DS_Project\DS_Project\DS_Project.cpp(52,28): warning C4101: 'err': unreferenced local variable
   DS_Project.vcxproj -> C:\Users\Geramizade\source\repos\DS_Project\x64\Debug\DS_Project.exe
